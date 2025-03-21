@@ -1,4 +1,10 @@
-### Milestone 1: Single-Threaded Web Server
+**Nama: Ghina Nabila Gunawan**
+
+**NPM: 2206825914**
+
+**Kelas: AdvProg - A**
+
+### 🚀 Milestone 1️⃣ : Single-Threaded Web Server
 
 Pada Milestone 1 ini, saya membangun sebuah web server sederhana menggunakan bahasa pemrograman Rust. Server ini hanya menangani satu request dalam satu waktu (single-threaded), dan tujuan utamanya adalah untuk menampilkan HTTP request yang dikirimkan oleh browser ke server.
 - **Membuat Server Web dengan Rust**: Menggunakan `TcpListener` untuk mendengarkan koneksi yang masuk di alamat `127.0.0.1:7878`.
@@ -35,7 +41,7 @@ Request tersebut menunjukkan kalau browser mengirimkan `GET` ke server pada alam
 
 ---
 
-### Milestone 2: Returning HTML
+### 🚀 Milestone 2️⃣: Returning HTML
 
 Pada milestone 2 ini, saya mengubah function `handle_connection` pada server supaya bisa mengirimkan konten HTML. Sebelumnya, server hanya menampilkan HTTP request di terminal, lalu di milestone ini, kita akan membuat server mengirimkan page HTML yang bisa dilihat di browser.
 1. **Memodifikasi `handle_connection`:**
@@ -56,7 +62,7 @@ Berikut adalah screenshot hasil server yang menampilkan page "Hello!" di browser
 
 ---
 
-### Milestone 3: Validating Request and Selectively Responding
+### 🚀 Milestone 3️⃣: Validating Request and Selectively Responding
 
 Pada milestone 3 ini, saya menambahkan logic untuk memvalidasi request yang datang ke server dan memberikan respons yang sesuai.
 - Saya memodifikasi function `handle_connection` untuk memeriksa path yang diminta oleh user.
@@ -78,7 +84,7 @@ Berikut adalah screenshot hasil perubahan yang saya lakukan:
 
 ---
 
-### Milestone 4: Simulation Slow Response
+### 🚀 Milestone 4️⃣: Simulation Slow Response
 
 Pada milestone 4 ini, saya menambahkan simulasi **slow response** pada server dengan menggunakan `thread::sleep`. Function ini mensimulasikan sebuah request yang memerlukan waktu 10 second untuk diproses, yang bertujuan untuk menunjukkan masalah pada server yang berjalan dalam **single-threaded**.
 
@@ -91,7 +97,7 @@ Pada milestone 4 ini, saya menambahkan simulasi **slow response** pada server de
 
 ---
 
-### Milestone 5: Multithreaded Server Using ThreadPool
+### 🚀 Milestone 5️⃣: Multithreaded Server Using ThreadPool
 
 Pada Milestone 5 ini, saya berhasil mengubah server **single-threaded** yang sebelumnya menangani setiap request satu per satu menjadi **multithreaded** dengan menggunakan **ThreadPool**. Tujuan dari perubahan ini adalah untuk meningkatkan throughput server dengan menangani beberapa request bersamaan, tanpa menunggu request sebelumnya selesai.
 
@@ -105,6 +111,18 @@ Untuk mengatasi masalah slow response yang disebabkan oleh request yang lambat (
 - **Implementasi Worker**: Worker-thread yang menunggu job melalui channel dan mengeksekusi job yang diterimanya menunjukkan bagaimana kita bisa menggunakan teknik seperti message-passing untuk mengelola job secara efisien di multithreading environment.
 
 Walaupun thread pool meningkatkan kinerja server, jumlah thread yang terbatas (4 thread dalam implementasi ini) bisa jadi pembatas kalau request yang sangat besar datang secara bersamaan.
+
+---
+
+### 🚀 Bonus Reflection: Function Improvement ✅
+
+Pada bagian bonus ini, saya mengubah function `new` yang sebelumnya langsung membuat objek `ThreadPool` menjadi function `build` yang return `Result`. Perubahan ini dilakukan untuk improve penanganan kesalahan, terutama dalam case di mana ukuran thread yang diberikan tidak valid.
+
+Function `new` yang return objek langsung bisa mengakibatkan server mengalami panic kalau parameter yang diterima tidak valid (misalnya, kalau ukuran thread nya 0). Dengan menggunakan `Result`, saya bisa lebih fleksibel dalam menangani kesalahan tersebut. Sekarang jika user memberikan ukuran yang tidak valid, aplikasi akan memberikan pesan kesalahan yang lebih jelas dan tidak langsung crash.
+
+#### Benefit penggunaan `build`:
+- **Penanganan Kesalahan Lebih Baik**: `build` return `Result`, yang memungkinkan kita menangani kesalahan tanpa memaksa aplikasi untuk stop tiba-tiba.
+- **Security Improvement**: Function `build` memastikan kalau ukuran thread yang diberikan > dari 0 sebelum objek ThreadPool dibuat, mencegah kesalahan logic yang mungkin terjadi kalau ukuran thread salah.
 
 ---
 
