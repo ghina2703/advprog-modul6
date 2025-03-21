@@ -32,3 +32,24 @@ Request tersebut menunjukkan kalau browser mengirimkan `GET` ke server pada alam
 - **TcpListener**: Saya belajar cara membuat server yang mendengarkan koneksi menggunakan `TcpListener` pada Rust.
 - **BufReader dan Memproses Request**: Server menggunakan `BufReader` untuk membaca aliran data dari koneksi dan mengambil baris-baris yang membentuk HTTP request.
 - **HTTP Request**: Saya juga memahami struktur HTTP request, yang terdiri dari informasi seperti `User-Agent`, `Accept`, dan `Connection`.
+
+---
+
+### Milestone 2: Returning HTML
+Pada milestone 2 ini, saya mengubah function `handle_connection` pada server supaya bisa mengirimkan konten HTML. Sebelumnya, server hanya menampilkan HTTP request di terminal, lalu di milestone ini, kita akan membuat server mengirimkan halaman HTML yang bisa dilihat di browser.
+1. **Memodifikasi `handle_connection`:**
+    - Function `handle_connection` diubah untuk membaca file `hello.html` dan mengirimkan isinya sebagai HTTP response.
+    - Saya juga menambahkan header `Content-Length` untuk memberi tahu ukuran konten yang akan dikirimkan supaya browser bisa memprosesnya dengan benar.
+
+2. **Membuat `hello.html`:**
+    - Saya membuat file HTML baru dengan nama `hello.html`. File ini berisi struktur HTML sederhana yang menampilkan pesan `hello` di browser.
+
+3. **Menguji Server:**
+    - Setelah server diubah, saya menjalankannya menggunakan `cargo run` dan melihat hasilnya dengan mengakses `http://127.0.0.1:7878` di browser.
+    - Hasilnya sesuai dengan harapan, halaman HTML dengan pesan "Hello!" berhasil muncul di browser.
+
+Berikut adalah screenshot hasil server yang menampilkan halaman "Hello!" di browser:
+
+![Milestone 2](image/Milestone2.png)
+
+---
