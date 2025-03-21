@@ -28,7 +28,7 @@ Request: [
 
 Request tersebut menunjukkan kalau browser mengirimkan `GET` ke server pada alamat `127.0.0.1:7878`. Header HTTP juga terlihat, seperti `User-Agent`, `Accept`, dan lainnya.
 
-**Apa _insight_ yang dipelajari:**
+**Apa _insight_ yang saya pelajari:**
 - **TcpListener**: Saya belajar cara membuat server yang mendengarkan koneksi menggunakan `TcpListener` pada Rust.
 - **BufReader dan Memproses Request**: Server menggunakan `BufReader` untuk membaca aliran data dari koneksi dan mengambil baris-baris yang membentuk HTTP request.
 - **HTTP Request**: Saya juga memahami struktur HTTP request, yang terdiri dari informasi seperti `User-Agent`, `Accept`, dan `Connection`.
@@ -36,6 +36,7 @@ Request tersebut menunjukkan kalau browser mengirimkan `GET` ke server pada alam
 ---
 
 ### Milestone 2: Returning HTML
+
 Pada milestone 2 ini, saya mengubah function `handle_connection` pada server supaya bisa mengirimkan konten HTML. Sebelumnya, server hanya menampilkan HTTP request di terminal, lalu di milestone ini, kita akan membuat server mengirimkan page HTML yang bisa dilihat di browser.
 1. **Memodifikasi `handle_connection`:**
     - Function `handle_connection` diubah untuk membaca file `hello.html` dan mengirimkan isinya sebagai HTTP response.
@@ -77,3 +78,15 @@ Berikut adalah screenshot hasil perubahan yang saya lakukan:
 
 ---
 
+### Milestone 4: Simulation Slow Response
+
+Pada milestone 4 ini, saya menambahkan simulasi **slow response** pada server dengan menggunakan `thread::sleep`. Function ini mensimulasikan sebuah request yang memerlukan waktu 10 second untuk diproses, yang bertujuan untuk menunjukkan masalah pada server yang berjalan dalam **single-threaded**.
+
+#### Apa _insight_ yang saya pelajari:
+- **Single-threaded Server:**
+   - Dengan server yang hanya bisa menangani satu request pada satu waktu, saya menyadari kalau ketika sebuah request (seperti `/sleep`) sedang diproses, server tidak bisa memproses request lain. Hal ini menyebabkan **delay** pada request yang masuk setelahnya, bahkan jika request itu tidak membutuhkan waktu lama untuk diproses.
+
+- **Simulation Slow Response:**
+   - Dengan menambahkan `thread::sleep`, saya bisa merasakan bagaimana waktu respons yang lambat mempengaruhi _user-experience_, terutama kalau banyak user mencoba mengakses server bersamaan.
+
+---
