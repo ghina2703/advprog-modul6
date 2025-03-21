@@ -28,7 +28,7 @@ Request: [
 
 Request tersebut menunjukkan kalau browser mengirimkan `GET` ke server pada alamat `127.0.0.1:7878`. Header HTTP juga terlihat, seperti `User-Agent`, `Accept`, dan lainnya.
 
-**Apa _insight_ yang saya pelajari:**
+**Apa _insight_ yang saya dapatkan:**
 - **TcpListener**: Saya belajar cara membuat server yang mendengarkan koneksi menggunakan `TcpListener` pada Rust.
 - **BufReader dan Memproses Request**: Server menggunakan `BufReader` untuk membaca aliran data dari koneksi dan mengambil baris-baris yang membentuk HTTP request.
 - **HTTP Request**: Saya juga memahami struktur HTTP request, yang terdiri dari informasi seperti `User-Agent`, `Accept`, dan `Connection`.
@@ -82,7 +82,7 @@ Berikut adalah screenshot hasil perubahan yang saya lakukan:
 
 Pada milestone 4 ini, saya menambahkan simulasi **slow response** pada server dengan menggunakan `thread::sleep`. Function ini mensimulasikan sebuah request yang memerlukan waktu 10 second untuk diproses, yang bertujuan untuk menunjukkan masalah pada server yang berjalan dalam **single-threaded**.
 
-#### Apa _insight_ yang saya pelajari:
+#### Apa _insight_ yang saya dapatkan:
 - **Single-threaded Server:**
    - Dengan server yang hanya bisa menangani satu request pada satu waktu, saya menyadari kalau ketika sebuah request (seperti `/sleep`) sedang diproses, server tidak bisa memproses request lain. Hal ini menyebabkan **delay** pada request yang masuk setelahnya, bahkan jika request itu tidak membutuhkan waktu lama untuk diproses.
 
@@ -90,3 +90,21 @@ Pada milestone 4 ini, saya menambahkan simulasi **slow response** pada server de
    - Dengan menambahkan `thread::sleep`, saya bisa merasakan bagaimana waktu respons yang lambat mempengaruhi _user-experience_, terutama kalau banyak user mencoba mengakses server bersamaan.
 
 ---
+
+### Milestone 5: Multithreaded Server Using ThreadPool
+
+Pada Milestone 5 ini, saya berhasil mengubah server **single-threaded** yang sebelumnya menangani setiap request satu per satu menjadi **multithreaded** dengan menggunakan **ThreadPool**. Tujuan dari perubahan ini adalah untuk meningkatkan throughput server dengan menangani beberapa request bersamaan, tanpa menunggu request sebelumnya selesai.
+
+Untuk mengatasi masalah slow response yang disebabkan oleh request yang lambat (seperti request `/sleep` yang memerlukan waktu lama untuk diproses), saya mengimplementasikan **ThreadPool**. Dengan menggunakan thread pool, server tidak akan memblokir request lain yang datang sementara satu request sedang diproses. Setiap request sekarang diproses oleh thread yang tersedia di pool, yang memungkinkan server untuk menangani beberapa request bersamaan.
+
+#### Apa _insight_ yang saya dapatkan:
+- **ThreadPool**: Saya belajar tentang bagaimana cara kerja **ThreadPool**, di mana kita dapat mengelola sejumlah thread yang siap menjalankan job tertentu. Ini sangat membantu untuk menghindari overload.
+
+- **Penggunaan Mutex dan Arc**: Saya juga belajar bagaimana menggunakan `Mutex` dan `Arc`. **`Arc`** memungkinkan beberapa thread untuk berbagi akses pada data yang sama, sedangkan **`Mutex`** memastikan hanya satu thread yang bisa mengakses data pada satu waktu, menghindari race conditions.
+
+- **Implementasi Worker**: Worker-thread yang menunggu job melalui channel dan mengeksekusi job yang diterimanya menunjukkan bagaimana kita bisa menggunakan teknik seperti message-passing untuk mengelola job secara efisien di multithreading environment.
+
+Walaupun thread pool meningkatkan kinerja server, jumlah thread yang terbatas (4 thread dalam implementasi ini) bisa jadi pembatas kalau request yang sangat besar datang secara bersamaan.
+
+---
+

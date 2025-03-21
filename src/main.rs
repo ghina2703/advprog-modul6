@@ -5,12 +5,17 @@ use std::{
     thread,
     time::Duration,
 };
+use hello::ThreadPool;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    let pool = ThreadPool::new(4);
+
     for stream in listener.incoming() {
         let stream = stream.unwrap();
-        handle_connection(stream);
+        pool.execute(move || {
+            handle_connection(stream);
+        });
     }
 }
 
@@ -39,7 +44,7 @@ fn generate_response_content(request_path: String) -> (String, String) {
     if request_path == "/" {
         ("HTTP/1.1 200 OK".to_string(), "hello.html".to_string())
     } else if request_path == "/sleep" {
-        thread::sleep(Duration::from_secs(10));
+        thread::sleep(Duration::from_secs(5));
         ("HTTP/1.1 200 OK".to_string(), "hello.html".to_string())
     } else {
         ("HTTP/1.1 404 NOT FOUND".to_string(), "404.html".to_string())
